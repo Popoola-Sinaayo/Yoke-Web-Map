@@ -3,7 +3,6 @@ import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loade
 import Hamburger from "hamburger-react";
 // import } from "@types/mapbox-gl"
 import imageIcon from "./assets/icon.png";
-import logo from "./logo.svg";
 import "./App.css";
 
 mapboxgl.accessToken =
@@ -26,8 +25,34 @@ function App() {
   const [lng, setLng] = useState<number>(3.4308);
   const [lat, setLat] = useState<number>(6.45201);
   const [zoom, setZoom] = useState<number>(13);
-  const [activeCity, setActiveCity] = useState("");
-  const [displayNav, setDisplayNav] = useState(false);
+  const [activeCity, setActiveCity] = useState<string>("");
+  const [displayNav, setDisplayNav] = useState<boolean>(false);
+
+  const citiesArray: cityType[] = [
+    { name: "Lagos", lat: 6.465422, lng: 3.406448 },
+    { name: "Pittsburg", lat: 37.406769, lng: -94.705528 },
+    { name: "Ottawa", lat: 38.604465, lng: -95.271301 },
+    { name: "Cambridge", lat: 38.563461, lng: -76.085251 },
+    { name: "Aberdeen", lat: 39.514877, lng: -76.17411 },
+    { name: "Frankfort", lat: 38.192902, lng: -84.883942 },
+    { name: "Changzou", lat: 31.811001, lng: 119.973999 },
+    { name: "Shenyang", lat: 41.799999, lng: 123.400002 },
+    { name: "Beijing", lat: 39.916668, lng: 116.383331 },
+    { name: "Shangai", lat: 31.224361, lng: 121.46917 },
+    { name: "Katsina", lat: 12.985531, lng: 7.617144 },
+    { name: "Calabar", lat: 4.982873, lng: 8.334503 },
+    { name: "Abuja", lat: 9.072264, lng: 7.491302 },
+    { name: "Nottingham", lat: 52.950001, lng: -1.15 },
+    { name: "Leicester", lat: 52.633331, lng: -1.133333 },
+    { name: "Chester", lat: 53.189999, lng: -2.89 },
+    { name: "Oxford", lat: 51.752022, lng: -1.257677 },
+    { name: "London", lat: 51.509865, lng: -0.118092 },
+    { name: "Southampton", lat: 50.909698, lng: -1.404351 },
+    { name: "Leeds", lat: 53.801277, lng: -1.548567 },
+  ];
+
+
+  // Intitalize and Controls Sets up default map functionality
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
@@ -115,6 +140,8 @@ function App() {
     }
   }, []);
 
+
+  // Changes the map location when longitude and latitude is changed
   useEffect(() => {
     console.log("lat changed or initial render");
     console.log(lat, lng);
@@ -152,41 +179,8 @@ function App() {
         alert("An error occured while fetching meteorological data");
       });
   }, [lng, lat]);
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position: any) => {
-        console.log(position.coords.latitude, position.coords.longitude);
-        setLat(position.coords.latitude);
-        setLng(position.coords.longitude);
-      });
-    } else {
-      alert("Location not enabled");
-    }
-  }, []);
-  console.log(lng, lat);
 
-  const citiesArray: cityType[] = [
-    { name: "Lagos", lat: 6.465422, lng: 3.406448 },
-    { name: "Pittsburg", lat: 37.406769, lng: -94.705528 },
-    { name: "Ottawa", lat: 38.604465, lng: -95.271301 },
-    { name: "Cambridge", lat: 38.563461, lng: -76.085251 },
-    { name: "Aberdeen", lat: 39.514877, lng: -76.17411 },
-    { name: "Frankfort", lat: 38.192902, lng: -84.883942 },
-    { name: "Changzou", lat: 31.811001, lng: 119.973999 },
-    { name: "Shenyang", lat: 41.799999, lng: 123.400002 },
-    { name: "Beijing", lat: 39.916668, lng: 116.383331 },
-    { name: "Shangai", lat: 31.224361, lng: 121.46917 },
-    { name: "Katsina", lat: 12.985531, lng: 7.617144 },
-    { name: "Calabar", lat: 4.982873, lng: 8.334503 },
-    { name: "Abuja", lat: 9.072264, lng: 7.491302 },
-    { name: "Nottingham", lat: 52.950001, lng: -1.15 },
-    { name: "Leicester", lat: 52.633331, lng: -1.133333 },
-    { name: "Chester", lat: 53.189999, lng: -2.89 },
-    { name: "Oxford", lat: 51.752022, lng: -1.257677 },
-    { name: "London", lat: 51.509865, lng: -0.118092 },
-    { name: "Southampton", lat: 50.909698, lng: -1.404351 },
-    { name: "Leeds", lat: 53.801277, lng: -1.548567 },
-  ];
+  
   const searchForCity = (name: string) => {
     const filteredCity = citiesArray.filter((city) => city.name.includes(name));
     console.log(filteredCity);
@@ -199,32 +193,6 @@ function App() {
     <div>
       <nav className={displayNav ? "" : "display-none"}>
         <ul>
-          {/* <li className='active' onClick={() => {
-            setLat(6.465422)
-            setLng(3.406448)
-          }}>Lagos</li>
-          <li onClick={() => {
-            setLat(37.406769)
-            setLng(-94.705528)
-          }}>Pittsburg</li>
-          <li onClick={() => {
-            setLat(38.604465)
-            setLng(	-95.271301)
-          }}>Ottawa</li>
-          <li onClick={() => {
-            setLat(38.604465)
-            setLng(	-95.271301)
-          }}>Cambridge</li>
-          <li>Lagos</li>
-          <li>Lagos</li>
-          <li>Lagos</li>
-          <li>Lagos</li>
-          <li>Lagos</li>
-          <li>Lagos</li>
-          <li>Lagos</li>
-          <li>Lagos</li>
-          <li>Lagos</li>
-          <li>Lagos</li> */}
           {citiesArray.map((city) => {
             return (
               <li
@@ -235,7 +203,6 @@ function App() {
                   setActiveCity(city.name);
                   setDisplayNav(false);
                 }}
-                className={activeCity === city.name ? "active" : ""}
               >
                 {city.name}
               </li>
