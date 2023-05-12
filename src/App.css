@@ -1,38 +1,98 @@
-.App {
+.map-container {
+  height: 100vh;
+  width: 100%;
+}
+
+nav {
+  position: fixed;
+  width: 250px;
+  left: 0;
+  height: 100%;
+  background-color: white;
+  /* overflow-y: scroll; */
+  overflow-x: scroll;
+  z-index: 50;
+  transition: ease 500ms;
+}
+
+.display-none {
+  display: none;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: auto;
+  padding: 0;
+  width: 100%;
+  padding-top: 40px;
+}
+
+nav ul li {
+  font-size: 20px;
+  width: 90%;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  padding: 20px 0 20px 0;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.active {
+  background-color: rgb(158, 158, 228);
+  border-radius: 30px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.burger-icon {
+  padding: 20px;
+  z-index: 50;
+  background-color: inherit;
+  position: absolute;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.search-input {
+  position: relative;
 }
 
-.App-link {
-  color: #61dafb;
+.search-input-container {
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  z-index: 50;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+.search-input input {
+  padding: 12px 20px;
+  width: 250px;
+  border: 0;
+  border-radius: 10px;
+}
+
+.search-input button {
+  outline: none;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 10px;
+  position: absolute;
+  right: 8px;
+  top: 4px;
+  cursor: pointer;
+}
+
+.searched-city {
+  background-color: white;
+  width: 100px;
+  margin: 10px;
+  padding: 10px 20px;
+}
+
+.searched-city p {
+  cursor: pointer;
+}
+
+
+@media (max-width: 400px) {
+  .search-input input {
+    width: 120px
   }
 }
