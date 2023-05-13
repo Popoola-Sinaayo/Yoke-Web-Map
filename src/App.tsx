@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl from 'mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import Hamburger from "hamburger-react";
-// import } from "@types/mapbox-gl"
 import imageIcon from "./assets/icon.png";
 import "./App.css";
 
@@ -72,15 +71,12 @@ function App() {
           if (error) throw error;
 
           // Add the image to the map style.
-          console.log(image);
-          console.log(lat, lng);
           map.current.addImage("info-icon", image);
           fetch(
             `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=temperature_2m_max,precipitation_sum,windspeed_10m_max,precipitation_probability_mean,winddirection_10m_dominant,rain_sum&timezone=GMT`
           )
             .then((response) => response.json())
             .then((data) => {
-              console.log(data);
               map.current.addSource("places", {
                 type: "geojson",
                 data: {
@@ -91,7 +87,7 @@ function App() {
                       properties: {
                         description: `<strong>${activeCity} Weather Forecast</strong><p><strong>Today</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][0]}${data["daily_units"]["temperature_2m_max"]}, Precipitation: ${data["daily"]["precipitation_probability_mean"][0]}${data["daily_units"]["precipitation_probability_mean"]}</p>
                   <p>Rain: ${data["daily"]["rain_sum"][0]}${data["daily_units"]["rain_sum"]}, Wind Speed: ${data["daily"]["windspeed_10m_max"][0]}${data["daily_units"]["windspeed_10m_max"]}</p>
-                  <p><strong>Tomorrow</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][1]} ${data["daily_units"]["temperature_2m_max"]},Precipitation: ${data["daily"]["precipitation_probability_mean"][1]}${data["daily_units"]["precipitation_probability_mean"]}</p>
+                  <p><strong>Tomorrow</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][1]}${data["daily_units"]["temperature_2m_max"]},Precipitation: ${data["daily"]["precipitation_probability_mean"][1]}${data["daily_units"]["precipitation_probability_mean"]}</p>
                   <p>Rain: ${data["daily"]["rain_sum"][1]}${data["daily_units"]["rain_sum"]}, Wind Speed: ${data["daily"]["windspeed_10m_max"][1]} ${data["daily_units"]["windspeed_10m_max"]}</p>`,
                       },
                       geometry: {
@@ -117,7 +113,6 @@ function App() {
                 // Copy coordinates array.
                 const coordinates = e.features[0].geometry.coordinates.slice();
                 const description = e.features[0].properties.description;
-                console.log("clicked");
                 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                 }
@@ -147,16 +142,12 @@ function App() {
 
   // Changes the map location when longitude and latitude is changed
   useEffect(() => {
-    console.log("lat changed or initial render");
-    console.log(lat, lng);
-    console.log(map.current.getCenter());
     map.current.setCenter([lng, lat]);
     fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=temperature_2m_max,precipitation_sum,windspeed_10m_max,precipitation_probability_mean,winddirection_10m_dominant,rain_sum&timezone=GMT`
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (map.current.getSource("places")) {
           map.current.getSource("places").setData({
             type: "FeatureCollection",
@@ -166,7 +157,7 @@ function App() {
                 properties: {
                   description: `<strong>${activeCity} Weather Forecast</strong><p><strong>Today</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][0]}${data["daily_units"]["temperature_2m_max"]},Precipitation: ${data["daily"]["precipitation_probability_mean"][0]}${data["daily_units"]["precipitation_probability_mean"]}</p>
                   <p>Rain: ${data["daily"]["rain_sum"][0]}${data["daily_units"]["rain_sum"]},Wind Speed: ${data["daily"]["windspeed_10m_max"][0]}${data["daily_units"]["windspeed_10m_max"]}</p>
-                  <p><strong>Tomorrow</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][1]} ${data["daily_units"]["temperature_2m_max"]},Precipitation: ${data["daily"]["precipitation_probability_mean"][1]}${data["daily_units"]["precipitation_probability_mean"]}</p>
+                  <p><strong>Tomorrow</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][1]}${data["daily_units"]["temperature_2m_max"]},Precipitation: ${data["daily"]["precipitation_probability_mean"][1]}${data["daily_units"]["precipitation_probability_mean"]}</p>
                   <p>Rain: ${data["daily"]["rain_sum"][1]}${data["daily_units"]["rain_sum"]},Wind Speed: ${data["daily"]["windspeed_10m_max"][1]} ${data["daily_units"]["windspeed_10m_max"]}</p>`,
                 },
                 geometry: {
@@ -179,18 +170,20 @@ function App() {
         }
       })
       .catch((err) => {
-        console.log(err);
         alert("An error occured while fetching meteorological data");
       });
   }, [lng, lat]);
 
   // Filter city during search
   const searchForCity = (name: string) => {
+    setSearchedForCities([])
+    if (!name || name === "") return
     const filteredCity = citiesArray.filter((city) => city.name.includes(name));
-    console.log(filteredCity);
     setSearchedForCities(filteredCity);
     setSearchedCity("");
   };
+  console.log(searchedCity)
+  console.log((!searchedCity && searchedCity !== ""))
 
   return (
     <div>
@@ -232,7 +225,7 @@ function App() {
           <button
             onClick={() => {
               searchForCity(searchedCity);
-              setShowSearchedCity(true);
+              searchedCity !== "" && setShowSearchedCity(true);
             }}
           >
             Search
@@ -250,7 +243,6 @@ function App() {
                     setActiveCity(city.name);
                     setShowSearchedCity(false);
                   }}
-                  className={activeCity === city.name ? "active" : ""}
                 >
                   {city.name}
                 </p>
