@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import mapboxgl from 'mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import Hamburger from "hamburger-react";
 // import } from "@types/mapbox-gl"
 import imageIcon from "./assets/icon.png";
@@ -7,6 +7,10 @@ import "./App.css";
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoic2luYWF5byIsImEiOiJjbGhrYzVuZHIwa2EyM2xveHVwemFrdHB3In0.v7RevsFCBFMXKbi8MZ7PyQ";
+  
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+// mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 function App() {
   interface cityType {
@@ -24,7 +28,7 @@ function App() {
   const [searchedCity, setSearchedCity] = useState<string>("");
   const [lng, setLng] = useState<number>(3.4308);
   const [lat, setLat] = useState<number>(6.45201);
-  const [zoom, setZoom] = useState<number>(13);
+  const [zoom, setZoom] = useState<number>(12);
   const [activeCity, setActiveCity] = useState<string>("");
   const [displayNav, setDisplayNav] = useState<boolean>(false);
 
@@ -85,10 +89,10 @@ function App() {
                     {
                       type: "Feature",
                       properties: {
-                        description: `<strong>${activeCity}</strong><p><strong>Today</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][0]}${data["daily_units"]["temperature_2m_max"]},Rain: ${data["daily"]["rain_sum"][0]}${data["daily_units"]["rain_sum"]}</p>
-                  <p>Precipitation: ${data["daily"]["precipitation_probability_mean"][0]}${data["daily_units"]["precipitation_probability_mean"]},  Wind Speed: ${data["daily"]["windspeed_10m_max"][0]}${data["daily_units"]["windspeed_10m_max"]}</p>
-                  <p><strong>Tomorrow</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][1]} ${data["daily_units"]["temperature_2m_max"]},Rain: ${data["daily"]["rain_sum"][1]}${data["daily_units"]["rain_sum"]}</p>
-                  <p>Precipitation: ${data["daily"]["precipitation_probability_mean"][1]}${data["daily_units"]["precipitation_probability_mean"]},  Wind Speed: ${data["daily"]["windspeed_10m_max"][1]} ${data["daily_units"]["windspeed_10m_max"]}</p>`,
+                        description: `<strong>${activeCity} Weather Forecast</strong><p><strong>Today</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][0]}${data["daily_units"]["temperature_2m_max"]}, Precipitation: ${data["daily"]["precipitation_probability_mean"][0]}${data["daily_units"]["precipitation_probability_mean"]}</p>
+                  <p>Rain: ${data["daily"]["rain_sum"][0]}${data["daily_units"]["rain_sum"]}, Wind Speed: ${data["daily"]["windspeed_10m_max"][0]}${data["daily_units"]["windspeed_10m_max"]}</p>
+                  <p><strong>Tomorrow</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][1]} ${data["daily_units"]["temperature_2m_max"]},Precipitation: ${data["daily"]["precipitation_probability_mean"][1]}${data["daily_units"]["precipitation_probability_mean"]}</p>
+                  <p>Rain: ${data["daily"]["rain_sum"][1]}${data["daily_units"]["rain_sum"]}, Wind Speed: ${data["daily"]["windspeed_10m_max"][1]} ${data["daily_units"]["windspeed_10m_max"]}</p>`,
                       },
                       geometry: {
                         type: "Point",
@@ -106,7 +110,7 @@ function App() {
                 source: "places", // reference the data source
                 layout: {
                   "icon-image": "info-icon", // reference the image
-                  "icon-size": 0.03,
+                  "icon-size": 0.05,
                 },
               });
               map.current.on("click", "places", (e: any) => {
@@ -160,10 +164,10 @@ function App() {
               {
                 type: "Feature",
                 properties: {
-                  description: `<strong>${activeCity}</strong><p><strong>Today</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][0]}${data["daily_units"]["temperature_2m_max"]},Rain: ${data["daily"]["rain_sum"][0]}${data["daily_units"]["rain_sum"]}</p>
-                  <p>Precipitation: ${data["daily"]["precipitation_probability_mean"][0]}${data["daily_units"]["precipitation_probability_mean"]},  Wind Speed: ${data["daily"]["windspeed_10m_max"][0]}${data["daily_units"]["windspeed_10m_max"]}</p>
-                  <p><strong>Tomorrow</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][1]} ${data["daily_units"]["temperature_2m_max"]},Rain: ${data["daily"]["rain_sum"][1]}${data["daily_units"]["rain_sum"]}</p>
-                  <p>Precipitation: ${data["daily"]["precipitation_probability_mean"][1]}${data["daily_units"]["precipitation_probability_mean"]},  Wind Speed: ${data["daily"]["windspeed_10m_max"][1]} ${data["daily_units"]["windspeed_10m_max"]}</p>`,
+                  description: `<strong>${activeCity} Weather Forecast</strong><p><strong>Today</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][0]}${data["daily_units"]["temperature_2m_max"]},Precipitation: ${data["daily"]["precipitation_probability_mean"][0]}${data["daily_units"]["precipitation_probability_mean"]}</p>
+                  <p>Rain: ${data["daily"]["rain_sum"][0]}${data["daily_units"]["rain_sum"]},Wind Speed: ${data["daily"]["windspeed_10m_max"][0]}${data["daily_units"]["windspeed_10m_max"]}</p>
+                  <p><strong>Tomorrow</strong></p><p>Temperature: ${data["daily"]["temperature_2m_max"][1]} ${data["daily_units"]["temperature_2m_max"]},Precipitation: ${data["daily"]["precipitation_probability_mean"][1]}${data["daily_units"]["precipitation_probability_mean"]}</p>
+                  <p>Rain: ${data["daily"]["rain_sum"][1]}${data["daily_units"]["rain_sum"]},Wind Speed: ${data["daily"]["windspeed_10m_max"][1]} ${data["daily_units"]["windspeed_10m_max"]}</p>`,
                 },
                 geometry: {
                   type: "Point",
@@ -180,7 +184,7 @@ function App() {
       });
   }, [lng, lat]);
 
-  
+  // Filter city during search
   const searchForCity = (name: string) => {
     const filteredCity = citiesArray.filter((city) => city.name.includes(name));
     console.log(filteredCity);
@@ -188,7 +192,6 @@ function App() {
     setSearchedCity("");
   };
 
-  useEffect(() => {}, []);
   return (
     <div>
       <nav className={displayNav ? "" : "display-none"}>
@@ -203,6 +206,7 @@ function App() {
                   setActiveCity(city.name);
                   setDisplayNav(false);
                 }}
+                className={activeCity === city.name ? "active" : ""}
               >
                 {city.name}
               </li>
