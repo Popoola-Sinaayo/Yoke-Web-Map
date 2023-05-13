@@ -178,7 +178,7 @@ function App() {
   const searchForCity = (name: string) => {
     setSearchedForCities([])
     if (!name || name === "") return
-    const filteredCity = citiesArray.filter((city) => city.name.includes(name));
+    const filteredCity = citiesArray.filter((city) => city.name.toLowerCase().includes(name.toLowerCase()));
     setSearchedForCities(filteredCity);
     setSearchedCity("");
   };
